@@ -22,6 +22,8 @@ public class Main {
                 case 4:
                     dl.iterateForward();
                     break;
+                default:
+                    System.out.println("Invalid input");
             }
             inputChoice = displayMenu();
         }
@@ -36,20 +38,34 @@ public class Main {
         Path path = Paths.get(fileName);
         Scanner fileScanner = new Scanner(path);
         System.out.println("Reading input file...");
+
         while(fileScanner.hasNextLine()){
             String patientRecord = fileScanner.nextLine();
-            String[] patientNameAge = patientRecord.split(",");
-//            System.out.println(patientNameAge[0]+" "+patientNameAge[1]+" "+patientId);
-            registerPatient(patientNameAge[0], Integer.parseInt(patientNameAge[1]));
+            String[] patNameAge = patientRecord.split(",");
+
+            if(patNameAge.length==2){
+                //remove whitespace from both ends of a string
+                patNameAge[0] = patNameAge[0].trim();
+                patNameAge[1] = patNameAge[1].trim();
+
+                registerPatient(patNameAge[0], Integer.parseInt(patNameAge[1]));
+            }
+            else{
+                System.out.println("Invalid record found -"+patientRecord);
+            }
+
         }
         fileScanner.close();
     }
 
     private static void registerPatient(String name, int age) {
-        String patientId = generateId();
-//        System.out.println(name+" "+age+" "+patientId);
-        dl.addNodeBack(name, age, patientId);
-
+        if(name.length()>0 && (age>0 && age<131)) {
+            String patientId = generateId();
+            dl.addNodeBack(name, age, patientId);
+        }
+        else{
+            System.out.println("Invalid record found "+name+" "+age);
+        }
     }
     private static int displayMenu() {
         Scanner in = new Scanner(System.in);
