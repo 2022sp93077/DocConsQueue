@@ -1,0 +1,4 @@
+Anu,30
+Riya,35
+Bell,20
+Taco,100

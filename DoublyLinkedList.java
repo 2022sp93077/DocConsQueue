@@ -3,7 +3,7 @@ public class DoublyLinkedList {
     Patient tail = null;
 
     // Function to add a node in the front of doubly linked list
-    public void addNodeFront(String name,int age,String id) {
+    public void addNodeFront(String name,int age,int id) {
 
         Patient temp = new Patient(name, age, id);
 
@@ -15,26 +15,28 @@ public class DoublyLinkedList {
 
         if(tail == null)
         {
+            head = temp;
             tail = temp;
         }
         System.out.println("New node added");
     }
 
-    // Function to add a node in the back of doubly linked list
-    public void addNodeBack(String name,int age,String id) {
+    // Function to add a node at the back of doubly linked list
+    public void addNodeBack(String name,int age,int id) {
 
         Patient temp = new Patient(name, age, id);
 
         if(tail != null)
         {
+            temp.prev = tail;
             tail.next = temp;
+            tail = temp;
         }
-
-        tail = temp;
 
         if(head == null)
         {
             head = temp;
+            tail = temp;
         }
         System.out.println("New node added:");
     }
@@ -43,7 +45,7 @@ public class DoublyLinkedList {
         Patient temp = head;
 
         while(temp != null){
-            System.out.println(temp.name);
+            System.out.println(temp.name + "," + temp.id);
             temp = temp.next;
         }
     }
