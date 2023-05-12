@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         int inputChoice = displayMenu();
-        while(inputChoice < 7){
+        while(inputChoice < 5){
             switch (inputChoice){
                 case 1: {
                     readFromInputFile();
@@ -25,17 +25,11 @@ public class Main {
                     registerPatient(patientDetails[0],Integer.parseInt(patientDetails[1]));
                     break;
                 }
-                case 3:break;
+                case 3:
+                    nextPatient();
+                    break;
                 case 4:
-                    dl.iterateForward();
-                    break;
-                case 5:
-                    for(int i=0;i<arr.size();i++){
-                        System.out.println(arr.get(i));
-                    }
-                    break;
-                case 6:
-                    dequeuePatient();
+                    displayQueue();
                     break;
                 default:
                     System.out.println("Invalid input");
@@ -86,7 +80,6 @@ public class Main {
         else{
             System.out.println("Invalid record found "+name+" "+age);
         }
-        dl.iterateForward();
     }
     private static int displayMenu() {
         Scanner in = new Scanner(System.in);
@@ -207,11 +200,38 @@ public class Main {
             dl.removeNodeByValue(temp);
             arr.set(0,lastElement);
             arr.remove(n-1);
-            n = n - 1;
-            heapify(arr, n, 0);
+            n = arr.size();
+            for (int i = n / 2 - 1; i >= 0; i--)
+                heapify(arr, n, i);
+            for (int i = n - 1; i >= 0; i--) {
+                // Move current root to end
+                int tempone = arr.get(0);
+                arr.set(0,arr.get(i));
+                arr.set(i,tempone);
+
+                // call max heapify on the reduced heap
+                heapify(arr, i, 0);
+            }
+        }
+    }
+
+    private static void nextPatient(){
+        if(arr.size()>0){
+            dequeuePatient();
+            Patient temp = dl.head;
+            Patient nextPatientNode = dl.findPatient(temp,arr.get(0));
+            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
         }
         else{
             System.out.println("No Patients to attend");
+        }
+    }
+
+    private static void displayQueue(){
+        Patient temp = dl.head;
+        for(int i=0;i<arr.size();i++){
+            Patient nextPatientNode = dl.findPatient(temp,arr.get(i));
+            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
         }
     }
 }

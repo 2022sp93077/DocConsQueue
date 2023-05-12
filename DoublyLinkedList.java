@@ -39,7 +39,6 @@ public class DoublyLinkedList {
             head = temp;
             tail = temp;
         }
-        System.out.println("New node added:");
     }
 
     public void iterateForward(){
@@ -105,6 +104,16 @@ public class DoublyLinkedList {
         if (del.prev != null) {
             del.prev.next = del.next;
         }
+    }
+
+    public Patient findPatient(Patient node,int id){
+        while(node!=null){
+            if(node.id == id){
+                return node;
+            }
+            node = node.next;
+        }
+        return null;
     }
 }
 
