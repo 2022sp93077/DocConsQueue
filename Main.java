@@ -82,7 +82,6 @@ public class Main {
         else{
             System.out.println("Invalid record found "+name+" "+age);
         }
-        dl.iterateForward();
     }
     private static int displayMenu() {
         Scanner in = new Scanner(System.in);
