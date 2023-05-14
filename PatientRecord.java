@@ -1,11 +1,11 @@
-public class DoublyLinkedList {
-    Patient head = null;
-    Patient tail = null;
+public class PatientRecord {
+    PatientNode head = null;
+    PatientNode tail = null;
 
     // Function to add a node in the front of doubly linked list
     public void addNodeFront(String name,int age,int id) {
 
-        Patient temp = new Patient(name, age, id);
+        PatientNode temp = new PatientNode(name, age, id);
 
         if(head != null )
         {
@@ -25,7 +25,7 @@ public class DoublyLinkedList {
     // Function to add a node at the back of doubly linked list
     public void addNodeBack(String name,int age,int id) {
 
-        Patient temp = new Patient(name, age, id);
+        PatientNode temp = new PatientNode(name, age, id);
 
         if(tail != null)
         {
@@ -42,7 +42,7 @@ public class DoublyLinkedList {
     }
 
     public void iterateForward(){
-        Patient temp = head;
+        PatientNode temp = head;
 
         while(temp != null){
             System.out.println(temp.name + "," + temp.id);
@@ -50,7 +50,7 @@ public class DoublyLinkedList {
         }
     }
     public void iterateBackward(){
-        Patient temp = tail;
+        PatientNode temp = tail;
 
         while(temp != null){
             System.out.println(temp.name);
@@ -59,7 +59,7 @@ public class DoublyLinkedList {
     }
 
     public String removeNodeFront() {
-        Patient temp = head;
+        PatientNode temp = head;
         if(head.next != null){
             head = head.next;
             head.prev = null;
@@ -75,7 +75,7 @@ public class DoublyLinkedList {
 
     public String removeNodeBack() {
 
-        Patient temp = tail;
+        PatientNode temp = tail;
 
         tail = tail.prev;
         tail.next = null;
@@ -84,7 +84,7 @@ public class DoublyLinkedList {
         return temp.name;
     }
 
-    public void removeNodeByValue(Patient del){
+    public void removeNodeByValue(PatientNode del){
         if (head == null || del == null) {
             return;
         }
@@ -106,7 +106,7 @@ public class DoublyLinkedList {
         }
     }
 
-    public Patient findPatient(Patient node,int id){
+    public PatientNode findPatient(PatientNode node, int id){
         while(node!=null){
             if(node.id == id){
                 return node;

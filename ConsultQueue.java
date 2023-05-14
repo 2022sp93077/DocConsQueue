@@ -1,53 +1,23 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Random;
 
-public class Main {
-    private static final DoublyLinkedList dl = new DoublyLinkedList();
-    static ArrayList<Integer> arr = new ArrayList<Integer>();
+public class ConsultQueue {
 
-    public static void main(String[] args) throws IOException {
-        int inputChoice = displayMenu();
-        while(inputChoice < 5){
-            switch (inputChoice){
-                case 1: {
-                    readFromInputFile();
-                    break;
-                }
-                case 2: {
-                    String valueHelp = String.format("Enter the name and age in %s format","(Name,Age)");
-                    System.out.println(valueHelp);
-                    Scanner inputVal = new Scanner(System.in);
-                    String[] patientDetails = inputVal.nextLine().split(",");
-                    registerPatient(patientDetails[0],Integer.parseInt(patientDetails[1]));
-                    break;
-                }
-                case 3:
-                    nextPatient();
-                    break;
-                case 4:
-                    displayQueue();
-                    break;
-                default:
-                    System.out.println("Invalid input");
-            }
-            inputChoice = displayMenu();
-        }
-        System.out.println("Exit");
-    }
-
+    private static final PatientRecord dl = new PatientRecord();
+    private static ArrayList<Integer> arr = new ArrayList<Integer>();
+    private static int id_gen = 0;
     private static int generateId(){
-        Random rand = new Random();
-
-        // Generate random integers in range 0 to 999
-        int rand_int1 = rand.nextInt(1000);
-        return rand_int1;
+        id_gen++;
+        return id_gen;
     }
-    private static void readFromInputFile() throws IOException {
-        String fileName = "Patient.txt";
+
+    protected static void readFromInputFile() throws IOException {
+        String fileName = "Input.txt";
         Path path = Paths.get(fileName);
         Scanner fileScanner = new Scanner(path);
         System.out.println("Reading input file...");
@@ -71,7 +41,7 @@ public class Main {
         fileScanner.close();
     }
 
-    private static void registerPatient(String name, int age) {
+    protected static void registerPatient(String name, int age) {
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
             dl.addNodeBack(name, age, patientId);
@@ -80,19 +50,6 @@ public class Main {
         else{
             System.out.println("Invalid record found "+name+" "+age);
         }
-    }
-    private static int displayMenu() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("\n" +
-                "Menu Options\n" +
-                "1. Import patients from file\n" +
-                "2. Enter new patient information\n" +
-                "3. Display next patient in line\n" +
-                "4. Output current patient waiting list\n" +
-                "5. Exit\n");
-
-        //returning user entered choice
-        return in.nextInt();
     }
     private static void enqueuePatient(int id) {
         int n = arr.size() + 1; //initialise with dll size
@@ -121,8 +78,8 @@ public class Main {
 
         // If left child is larger than root
         if (l < n ) { // if (l < n && arr[l] > arr[largest])
-            Patient t1 = dl.head;
-            Patient t2 = dl.tail;
+            PatientNode t1 = dl.head;
+            PatientNode t2 = dl.tail;
             while ((t1!= null || t2!= null) && (!(arr.get(l).equals(t1.id)) && !(arr.get(l).equals(t2.id)))) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -149,8 +106,8 @@ public class Main {
 
         // If right child is larger than largest so far
         if (r < n) { // if (r < n && arr[r] > arr[largest])
-            Patient t1 = dl.head;
-            Patient t2 = dl.tail;
+            PatientNode t1 = dl.head;
+            PatientNode t2 = dl.tail;
             while ((t1!= null || t2!= null) && !arr.get(r).equals(t1.id) && !arr.get(r).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -190,7 +147,7 @@ public class Main {
         int n = arr.size();
         if(n>0){
             int lastElement = arr.get(n - 1);
-            Patient temp = dl.head;
+            PatientNode temp = dl.head;
             while(temp != null){
                 if(temp.id == arr.get(0)){
                     break;
@@ -205,9 +162,9 @@ public class Main {
                 heapify(arr, n, i);
             for (int i = n - 1; i >= 0; i--) {
                 // Move current root to end
-                int tempone = arr.get(0);
+                int tempOne = arr.get(0);
                 arr.set(0,arr.get(i));
-                arr.set(i,tempone);
+                arr.set(i,tempOne);
 
                 // call max heapify on the reduced heap
                 heapify(arr, i, 0);
@@ -215,11 +172,11 @@ public class Main {
         }
     }
 
-    private static void nextPatient(){
+    protected static void nextPatient(){
         if(arr.size()>0){
             dequeuePatient();
-            Patient temp = dl.head;
-            Patient nextPatientNode = dl.findPatient(temp,arr.get(0));
+            PatientNode temp = dl.head;
+            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(0));
             System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
         }
         else{
@@ -227,11 +184,16 @@ public class Main {
         }
     }
 
-    private static void displayQueue(){
-        Patient temp = dl.head;
+    protected static void displayQueue() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
+        PatientNode temp = dl.head;
+        int seq = 1;
         for(int i=0;i<arr.size();i++){
-            Patient nextPatientNode = dl.findPatient(temp,arr.get(i));
-            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
+            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(i));
+            System.out.printf("%d, %s, %d, %d\n%n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age);
+            writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
+            seq++;
         }
+        writer.close();
     }
 }
