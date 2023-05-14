@@ -1,7 +1,0 @@
-Anu,30
-Riya,35
-Bell,20
-Taco,100
-Nag,40
-samee,52
-puneeth,48
