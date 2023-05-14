@@ -9,9 +9,10 @@ public class DoublyLinkedList {
 
         if(head != null )
         {
+            temp.next = head;
             head.prev = temp;
+            head = temp;
         }
-        head = temp;
 
         if(tail == null)
         {
@@ -38,7 +39,6 @@ public class DoublyLinkedList {
             head = temp;
             tail = temp;
         }
-        System.out.println("New node added:");
     }
 
     public void iterateForward(){
@@ -60,12 +60,17 @@ public class DoublyLinkedList {
 
     public String removeNodeFront() {
         Patient temp = head;
-
-        head = head.next;
-        head.prev = null;
-
-        System.out.println("deleted: " + temp.name);
-        return temp.name;
+        if(head.next != null){
+            head = head.next;
+            head.prev = null;
+            System.out.println("deleted: " + temp.name);
+            return temp.name;
+        }
+        else {
+            head = null;
+            System.out.println("deleted: " + temp.name);
+            return temp.name;
+        }
     }
 
     public String removeNodeBack() {
@@ -79,5 +84,36 @@ public class DoublyLinkedList {
         return temp.name;
     }
 
+    public void removeNodeByValue(Patient del){
+        if (head == null || del == null) {
+            return;
+        }
+
+        if (head == del) {
+            head = del.next;
+        }
+
+        if(tail == del){
+            tail = tail.prev;
+        }
+
+        if (del.next != null) {
+            del.next.prev = del.prev;
+        }
+
+        if (del.prev != null) {
+            del.prev.next = del.next;
+        }
+    }
+
+    public Patient findPatient(Patient node,int id){
+        while(node!=null){
+            if(node.id == id){
+                return node;
+            }
+            node = node.next;
+        }
+        return null;
+    }
 }
 

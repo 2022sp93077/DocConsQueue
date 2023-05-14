@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         int inputChoice = displayMenu();
-        while(inputChoice != 5){
+        while(inputChoice < 5){
             switch (inputChoice){
                 case 1: {
                     readFromInputFile();
@@ -20,12 +20,18 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    registerPatient("abc",20);
+                    String valueHelp = String.format("Enter the name and age in %s format","(Name,Age)");
+                    System.out.println(valueHelp);
+                    Scanner inputVal = new Scanner(System.in);
+                    String[] patientDetails = inputVal.nextLine().split(",");
+                    registerPatient(patientDetails[0],Integer.parseInt(patientDetails[1]));
                     break;
                 }
-                case 3:break;
+                case 3:
+                    nextPatient();
+                    break;
                 case 4:
-                    dl.iterateForward();
+                    displayQueue();
                     break;
                 default:
                     System.out.println("Invalid input");
@@ -110,7 +116,7 @@ public class Main {
         }
     }
 
-    static void heapify(ArrayList arr, int n, int i)
+    private static void heapify(ArrayList arr, int n, int i)
     {
         int largest = i; // Initialize largest as root
         int l = 2 * i + 1; // left = 2*i + 1
@@ -152,14 +158,22 @@ public class Main {
                 t1 = t1.next;
                 t2 = t2.prev;
             }
-            int age_1 = arr.get(r).equals(t1.id) ? t1. age : t2.age;
+            int age_1 = 0;
+            if(t1!= null && arr.get(r).equals(t1.id) )
+                age_1 = t1.age;
+            else if(t2!= null && arr.get(r).equals(t2.id) )
+                age_1 = t2.age;
             t1 = dl.head;
             t2 = dl.tail;
             while ((t1!= null || t2!= null) && !arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
             }
-            int age_2 = arr.get(largest).equals(t1.id) ? t1. age : t2.age;
+            int age_2 = 0;
+            if(t1!= null && arr.get(largest).equals(t1.id) )
+                age_2 = t1.age;
+            else if(t2!= null && arr.get(largest).equals(t2.id) )
+                age_2 = t2.age;
             if (age_1 < age_2)
                 largest = r;
         }
@@ -172,6 +186,55 @@ public class Main {
 
             // Recursively heapify the affected sub-tree
             heapify(arr, n, largest);
+        }
+    }
+
+    private static void dequeuePatient(){
+        int n = arr.size();
+        if(n>0){
+            int lastElement = arr.get(n - 1);
+            Patient temp = dl.head;
+            while(temp != null){
+                if(temp.id == arr.get(0)){
+                    break;
+                }
+                temp = temp.next;
+            }
+            dl.removeNodeByValue(temp);
+            arr.set(0,lastElement);
+            arr.remove(n-1);
+            n = arr.size();
+            for (int i = n / 2 - 1; i >= 0; i--)
+                heapify(arr, n, i);
+            for (int i = n - 1; i >= 0; i--) {
+                // Move current root to end
+                int tempone = arr.get(0);
+                arr.set(0,arr.get(i));
+                arr.set(i,tempone);
+
+                // call max heapify on the reduced heap
+                heapify(arr, i, 0);
+            }
+        }
+    }
+
+    private static void nextPatient(){
+        if(arr.size()>0){
+            dequeuePatient();
+            Patient temp = dl.head;
+            Patient nextPatientNode = dl.findPatient(temp,arr.get(0));
+            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
+        }
+        else{
+            System.out.println("No Patients to attend");
+        }
+    }
+
+    private static void displayQueue(){
+        Patient temp = dl.head;
+        for(int i=0;i<arr.size();i++){
+            Patient nextPatientNode = dl.findPatient(temp,arr.get(i));
+            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
         }
     }
 }
