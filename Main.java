@@ -17,8 +17,6 @@ public class Main {
             switch (inputChoice){
                 case 1: {
                     readFromInputFile();
-                    for(int i=0;i< arr.size();i++)
-                        System.out.println(arr.get(i));
                     break;
                 }
                 case 2: {
