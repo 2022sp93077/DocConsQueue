@@ -21,7 +21,7 @@ public class ConsultQueue {
         Path path = Paths.get(fileName);
         Scanner fileScanner = new Scanner(path);
         System.out.println("Reading input file...");
-
+        int count = 0;
         while(fileScanner.hasNextLine()){
             String patientRecord = fileScanner.nextLine();
             String[] patNameAge = patientRecord.split(",");
@@ -31,12 +31,16 @@ public class ConsultQueue {
                 patNameAge[0] = patNameAge[0].trim();
                 patNameAge[1] = patNameAge[1].trim();
 
-                registerPatient(patNameAge[0], Integer.parseInt(patNameAge[1]));
+                registerPatient(patNameAge[0], Integer.parseInt(patNameAge[1]),false);
+                count++;
             }
             else{
                 System.out.println("Invalid record found -"+patientRecord);
             }
 
+        }
+        if(count>0){
+            System.out.println(String.format("Imported %d patients from file",count));
         }
         fileScanner.close();
     }
@@ -49,7 +53,7 @@ public class ConsultQueue {
         try{
             patientDetails = inputVal.nextLine().split(",");
             if(patientDetails.length==2 && patientDetails[0].matches("^[a-zA-Z]*$")) {
-                registerPatient(patientDetails[0].trim(),Integer.parseInt(patientDetails[1].trim()));
+                registerPatient(patientDetails[0].trim(),Integer.parseInt(patientDetails[1].trim()),true);
             }
             else{
                 throw new Exception("Invalid Patient data");
@@ -59,17 +63,22 @@ public class ConsultQueue {
         }
     }
 
-    private static void registerPatient(String name, int age) {
+    private static void registerPatient(String name, int age,boolean flag) {
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
             dl.addNodeBack(name, age, patientId);
-            enqueuePatient(patientId);
+            if(flag){
+                System.out.print(String.format("%s added to the queue , current position is ",name));
+                enqueuePatient(patientId,true);
+            }else{
+                enqueuePatient(patientId,false);
+            }
         }
         else{
             System.out.println("Invalid Patient data");
         }
     }
-    private static void enqueuePatient(int id) {
+    private static void enqueuePatient(int id,boolean flag) {
         int n = arr.size() + 1; //initialise with dll size
         arr.add(id);
         // Build heap (rearrange array)
@@ -85,6 +94,9 @@ public class ConsultQueue {
 
             // call max heapify on the reduced heap
             heapify(arr, i, 0);
+        }
+        if(flag){
+            System.out.println(arr.indexOf(id)+1);
         }
     }
 
