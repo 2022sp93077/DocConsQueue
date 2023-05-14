@@ -233,7 +233,6 @@ public class Main {
         int seq = 1;
         for(int i=0;i<arr.size();i++){
             Patient nextPatientNode = dl.findPatient(temp,arr.get(i));
-            System.out.println(String.format("%d,%s,%d,%d",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
             writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
             seq++;
         }
