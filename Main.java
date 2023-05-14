@@ -1,13 +1,15 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Random;
 
 public class Main {
     private static final DoublyLinkedList dl = new DoublyLinkedList();
-    static ArrayList<Integer> arr = new ArrayList<Integer>();
+    private static ArrayList<Integer> arr = new ArrayList<Integer>();
+    private static int id_gen = 0;
 
     public static void main(String[] args) throws IOException {
         int inputChoice = displayMenu();
@@ -42,12 +44,10 @@ public class Main {
     }
 
     private static int generateId(){
-        Random rand = new Random();
-
-        // Generate random integers in range 0 to 999
-        int rand_int1 = rand.nextInt(1000);
-        return rand_int1;
+        id_gen++;
+        return id_gen;
     }
+
     private static void readFromInputFile() throws IOException {
         String fileName = "Patient.txt";
         Path path = Paths.get(fileName);
@@ -230,11 +230,16 @@ public class Main {
         }
     }
 
-    private static void displayQueue(){
+    private static void displayQueue() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("Patient_queue.txt"));
         Patient temp = dl.head;
+        int seq = 1;
         for(int i=0;i<arr.size();i++){
             Patient nextPatientNode = dl.findPatient(temp,arr.get(i));
-            System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
+            System.out.println(String.format("%d,%s,%d,%d",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
+            writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
+            seq++;
         }
+        writer.close();
     }
 }
