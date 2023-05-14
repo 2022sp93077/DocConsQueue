@@ -41,14 +41,32 @@ public class ConsultQueue {
         fileScanner.close();
     }
 
-    protected static void registerPatient(String name, int age) {
+     public void getPatientInfo(){
+        String valueHelp = String.format("Enter the name and age in %s format","(Name,Age)");
+        System.out.println(valueHelp);
+        Scanner inputVal = new Scanner(System.in);
+        String[] patientDetails = new String[100];
+        try{
+            patientDetails = inputVal.nextLine().split(",");
+            if(patientDetails.length==2 && patientDetails[0].matches("^[a-zA-Z]*$")) {
+                registerPatient(patientDetails[0].trim(),Integer.parseInt(patientDetails[1].trim()));
+            }
+            else{
+                throw new Exception("Invalid Patient data");
+            }
+        }catch (Exception e) {
+            System.out.println("Invalid Patient data");
+        }
+    }
+
+    private static void registerPatient(String name, int age) {
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
             dl.addNodeBack(name, age, patientId);
             enqueuePatient(patientId);
         }
         else{
-            System.out.println("Invalid record found "+name+" "+age);
+            System.out.println("Invalid Patient data");
         }
     }
     private static void enqueuePatient(int id) {
@@ -172,12 +190,12 @@ public class ConsultQueue {
         }
     }
 
-    protected static void nextPatient(){
+    public void nextPatient(){
         if(arr.size()>0){
-            dequeuePatient();
             PatientNode temp = dl.head;
             PatientNode nextPatientNode = dl.findPatient(temp,arr.get(0));
             System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
+            dequeuePatient();
         }
         else{
             System.out.println("No Patients to attend");
