@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ConsultQueue {
 
     private static final PatientRecord dl = new PatientRecord();
-    private static ArrayList<Integer> arr = new ArrayList<Integer>();
+    private static ArrayList<Integer> patientList = new ArrayList<Integer>();
     private static int id_gen = 0;
     private static int generateId(){
         id_gen++;
@@ -79,24 +79,24 @@ public class ConsultQueue {
         }
     }
     private static void enqueuePatient(int id,boolean flag) {
-        int n = arr.size() + 1; //initialise with dll size
-        arr.add(id);
+        int n = patientList.size() + 1; //initialise with dll size
+        patientList.add(id);
         // Build heap (rearrange array)
         for (int i = n / 2 - 1; i >= 0; i--)
-            heapify(arr, n, i);
+            heapify(patientList, n, i);
 
         // One by one extract an element from heap
         for (int i = n - 1; i >= 0; i--) {
             // Move current root to end
-            int temp = arr.get(0);
-            arr.set(0,arr.get(i));
-            arr.set(i,temp);
+            int temp = patientList.get(0);
+            patientList.set(0,patientList.get(i));
+            patientList.set(i,temp);
 
             // call max heapify on the reduced heap
-            heapify(arr, i, 0);
+            heapify(patientList, i, 0);
         }
         if(flag){
-            System.out.println(arr.indexOf(id)+1);
+            System.out.println(patientList.indexOf(id)+1);
         }
     }
 
@@ -174,38 +174,38 @@ public class ConsultQueue {
     }
 
     private static void dequeuePatient(){
-        int n = arr.size();
+        int n = patientList.size();
         if(n>0){
-            int lastElement = arr.get(n - 1);
+            int lastElement = patientList.get(n - 1);
             PatientNode temp = dl.head;
             while(temp != null){
-                if(temp.id == arr.get(0)){
+                if(temp.id == patientList.get(0)){
                     break;
                 }
                 temp = temp.next;
             }
             dl.removeNodeByValue(temp);
-            arr.set(0,lastElement);
-            arr.remove(n-1);
-            n = arr.size();
+            patientList.set(0,lastElement);
+            patientList.remove(n-1);
+            n = patientList.size();
             for (int i = n / 2 - 1; i >= 0; i--)
-                heapify(arr, n, i);
+                heapify(patientList, n, i);
             for (int i = n - 1; i >= 0; i--) {
                 // Move current root to end
-                int tempOne = arr.get(0);
-                arr.set(0,arr.get(i));
-                arr.set(i,tempOne);
+                int tempOne = patientList.get(0);
+                patientList.set(0,patientList.get(i));
+                patientList.set(i,tempOne);
 
                 // call max heapify on the reduced heap
-                heapify(arr, i, 0);
+                heapify(patientList, i, 0);
             }
         }
     }
 
     public void nextPatient(){
-        if(arr.size()>0){
+        if(patientList.size()>0){
             PatientNode temp = dl.head;
-            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(0));
+            PatientNode nextPatientNode = dl.findPatient(temp,patientList.get(0));
             System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
             dequeuePatient();
         }
@@ -218,8 +218,8 @@ public class ConsultQueue {
         BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
         PatientNode temp = dl.head;
         int seq = 1;
-        for(int i=0;i<arr.size();i++){
-            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(i));
+        for(int i=0;i<patientList.size();i++){
+            PatientNode nextPatientNode = dl.findPatient(temp,patientList.get(i));
             System.out.printf("%d, %s, %d, %d\n%n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age);
             writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
             seq++;
