@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ConsultQueue {
 
-    private static final PatientRecord dl = new PatientRecord();
+    private static final PatientRecord patientRecordObj = new PatientRecord();
     private static ArrayList<Integer> patientList = new ArrayList<Integer>();
     private static int id_gen = 0;
     private static int generateId(){
@@ -66,7 +66,7 @@ public class ConsultQueue {
     private static void registerPatient(String name, int age,boolean flag) {
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
-            dl.addNodeBack(name, age, patientId);
+            patientRecordObj.addNodeBack(name, age, patientId);
             if(flag){
                 System.out.print(String.format("%s added to the queue , current position is ",name));
                 enqueuePatient(patientId,true);
@@ -108,8 +108,8 @@ public class ConsultQueue {
 
         // If left child is larger than root
         if (l < n ) { // if (l < n && arr[l] > arr[largest])
-            PatientNode t1 = dl.head;
-            PatientNode t2 = dl.tail;
+            PatientNode t1 = patientRecordObj.head;
+            PatientNode t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && (!(arr.get(l).equals(t1.id)) && !(arr.get(l).equals(t2.id)))) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -119,8 +119,8 @@ public class ConsultQueue {
                 age_1 = t1.age;
             else if(t2!= null && arr.get(l).equals(t2.id) )
                 age_1 = t2.age;
-            t1 = dl.head;
-            t2 = dl.tail;
+            t1 = patientRecordObj.head;
+            t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && (!arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id))) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -136,8 +136,8 @@ public class ConsultQueue {
 
         // If right child is larger than largest so far
         if (r < n) { // if (r < n && arr[r] > arr[largest])
-            PatientNode t1 = dl.head;
-            PatientNode t2 = dl.tail;
+            PatientNode t1 = patientRecordObj.head;
+            PatientNode t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && !arr.get(r).equals(t1.id) && !arr.get(r).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -147,8 +147,8 @@ public class ConsultQueue {
                 age_1 = t1.age;
             else if(t2!= null && arr.get(r).equals(t2.id) )
                 age_1 = t2.age;
-            t1 = dl.head;
-            t2 = dl.tail;
+            t1 = patientRecordObj.head;
+            t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && !arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -177,14 +177,14 @@ public class ConsultQueue {
         int n = patientList.size();
         if(n>0){
             int lastElement = patientList.get(n - 1);
-            PatientNode temp = dl.head;
+            PatientNode temp = patientRecordObj.head;
             while(temp != null){
                 if(temp.id == patientList.get(0)){
                     break;
                 }
                 temp = temp.next;
             }
-            dl.removeNodeByValue(temp);
+            patientRecordObj.removeNodeByValue(temp);
             patientList.set(0,lastElement);
             patientList.remove(n-1);
             n = patientList.size();
@@ -204,8 +204,8 @@ public class ConsultQueue {
 
     public void nextPatient(){
         if(patientList.size()>0){
-            PatientNode temp = dl.head;
-            PatientNode nextPatientNode = dl.findPatient(temp,patientList.get(0));
+            PatientNode temp = patientRecordObj.head;
+            PatientNode nextPatientNode = patientRecordObj.findPatient(temp,patientList.get(0));
             System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
             dequeuePatient();
         }
@@ -216,10 +216,10 @@ public class ConsultQueue {
 
     protected static void displayQueue() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
-        PatientNode temp = dl.head;
+        PatientNode temp = patientRecordObj.head;
         int seq = 1;
         for(int i=0;i<patientList.size();i++){
-            PatientNode nextPatientNode = dl.findPatient(temp,patientList.get(i));
+            PatientNode nextPatientNode = patientRecordObj.findPatient(temp,patientList.get(i));
             System.out.printf("%d, %s, %d, %d\n%n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age);
             writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
             seq++;
