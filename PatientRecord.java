@@ -106,6 +106,15 @@ public class PatientRecord {
         }
     }
 
+    public void removeAll(PatientNode curr_node){
+        while (curr_node != null) {
+            PatientNode nextNode = curr_node.next;
+            curr_node.next = null;
+            curr_node.prev = null;
+            curr_node = nextNode;
+        }
+    }
+
     public PatientNode findPatient(PatientNode node, int id){
         while(node!=null){
             if(node.id == id){

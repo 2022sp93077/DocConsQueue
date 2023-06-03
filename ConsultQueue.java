@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ConsultQueue {
 
-    private static final PatientRecord dl = new PatientRecord();
+    private static PatientRecord dl = new PatientRecord();
     private static ArrayList<Integer> arr = new ArrayList<Integer>();
     private static int id_gen = 0;
     private static int generateId(){
@@ -22,6 +22,14 @@ public class ConsultQueue {
         Scanner fileScanner = new Scanner(path);
         System.out.println("Reading input file...");
         int count = 0;
+        if(dl.head!=null) {
+            PatientRecord newPatientRecord = new PatientRecord();
+            dl.removeAll(dl.head);
+            ArrayList sec_list = (ArrayList)arr.clone();
+            arr.removeAll(sec_list);
+            dl = newPatientRecord;
+            arr = new ArrayList<>();
+        }
         while(fileScanner.hasNextLine()){
             String patientRecord = fileScanner.nextLine();
             String[] patNameAge = patientRecord.split(",");
@@ -64,6 +72,7 @@ public class ConsultQueue {
     }
 
     private static void registerPatient(String name, int age,boolean flag) {
+
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
             dl.addNodeBack(name, age, patientId);
