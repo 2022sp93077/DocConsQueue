@@ -225,8 +225,8 @@ public class ConsultQueue {
     }
 
     protected static void displayQueue() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
         if(patientList.size()>0){
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
             PatientNode temp = patientRecordObj.head;
             int seq = 1;
             for(int i=0;i<patientList.size();i++){
@@ -237,6 +237,8 @@ public class ConsultQueue {
             }
             writer.close();
         } else {
+            writer.write("");
+            writer.close();
             System.out.println("No Patients to attend");
         }
 
