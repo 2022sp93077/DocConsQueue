@@ -7,8 +7,8 @@ public class HospitalConsultation {
 
     public static void main(String[] args) throws IOException {
         int inputChoice = displayMenu();
-        while(inputChoice < 6){
-            switch (inputChoice){
+        while (inputChoice < 6) {
+            switch (inputChoice) {
                 case 1: {
                     consultQueue.readFromInputFile();
                     break;
@@ -30,9 +30,9 @@ public class HospitalConsultation {
                     System.out.println("Choose correct menu option");
                     break;
             }
-            if(inputChoice != 5)
+            if (inputChoice != 5)
                 inputChoice = displayMenu();
-            else{
+            else {
                 break;
             }
         }
@@ -41,14 +41,14 @@ public class HospitalConsultation {
     private static int displayMenu() {
         Scanner in = new Scanner(System.in);
         System.out.println("\n" +
-                    "Menu Options\n" +
-                    "1. Import patients from file\n" +
-                    "2. Enter new patient information\n" +
-                    "3. Display next patient in line\n" +
-                    "4. Output current patient waiting list\n" +
-                    "5. Exit\n");
+                "Menu Options\n" +
+                "1. Import patients from file\n" +
+                "2. Enter new patient information\n" +
+                "3. Display next patient in line\n" +
+                "4. Output current patient waiting list\n" +
+                "5. Exit\n");
         boolean flag = in.hasNextInt();
-        if(flag){
+        if (flag) {
             int val = in.nextInt();
             return val < 6 ? val : 0;
         }
