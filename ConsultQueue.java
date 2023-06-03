@@ -8,8 +8,9 @@ import java.util.Scanner;
 
 public class ConsultQueue {
 
-    private static PatientRecord dl = new PatientRecord();
-    private static ArrayList<Integer> arr = new ArrayList<Integer>();
+    private static PatientRecord patientRecordObj = new PatientRecord();
+    private static ArrayList<Integer> patientList = new ArrayList<Integer>();
+
     private static int id_gen = 0;
     private static int generateId(){
         id_gen++;
@@ -22,13 +23,13 @@ public class ConsultQueue {
         Scanner fileScanner = new Scanner(path);
         System.out.println("Reading input file...");
         int count = 0;
-        if(dl.head!=null) {
+        if(patientRecordObj.head!=null) {
             PatientRecord newPatientRecord = new PatientRecord();
-            dl.removeAll(dl.head);
-            ArrayList sec_list = (ArrayList)arr.clone();
-            arr.removeAll(sec_list);
-            dl = newPatientRecord;
-            arr = new ArrayList<>();
+            patientRecordObj.removeAll(patientRecordObj.head);
+            ArrayList<Integer> sec_list = (ArrayList<Integer>)patientList.clone();
+            patientList.removeAll(sec_list);
+            patientRecordObj = newPatientRecord;
+            patientList = new ArrayList<>();
         }
         while(fileScanner.hasNextLine()){
             String patientRecord = fileScanner.nextLine();
@@ -75,7 +76,7 @@ public class ConsultQueue {
 
         if(name.length()>0 && (age>0 && age<131)) {
             int patientId = generateId();
-            dl.addNodeBack(name, age, patientId);
+            patientRecordObj.addNodeBack(name, age, patientId);
             if(flag){
                 System.out.print(String.format("%s added to the queue , current position is ",name));
                 enqueuePatient(patientId,true);
@@ -88,24 +89,24 @@ public class ConsultQueue {
         }
     }
     private static void enqueuePatient(int id,boolean flag) {
-        int n = arr.size() + 1; //initialise with dll size
-        arr.add(id);
+        int n = patientList.size() + 1; //initialise with dll size
+        patientList.add(id);
         // Build heap (rearrange array)
         for (int i = n / 2 - 1; i >= 0; i--)
-            heapify(arr, n, i);
+            heapify(patientList, n, i);
 
         // One by one extract an element from heap
         for (int i = n - 1; i >= 0; i--) {
             // Move current root to end
-            int temp = arr.get(0);
-            arr.set(0,arr.get(i));
-            arr.set(i,temp);
+            int temp = patientList.get(0);
+            patientList.set(0,patientList.get(i));
+            patientList.set(i,temp);
 
             // call max heapify on the reduced heap
-            heapify(arr, i, 0);
+            heapify(patientList, i, 0);
         }
         if(flag){
-            System.out.println(arr.indexOf(id)+1);
+            System.out.println(patientList.indexOf(id)+1);
         }
     }
 
@@ -117,8 +118,8 @@ public class ConsultQueue {
 
         // If left child is larger than root
         if (l < n ) { // if (l < n && arr[l] > arr[largest])
-            PatientNode t1 = dl.head;
-            PatientNode t2 = dl.tail;
+            PatientNode t1 = patientRecordObj.head;
+            PatientNode t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && (!(arr.get(l).equals(t1.id)) && !(arr.get(l).equals(t2.id)))) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -128,8 +129,8 @@ public class ConsultQueue {
                 age_1 = t1.age;
             else if(t2!= null && arr.get(l).equals(t2.id) )
                 age_1 = t2.age;
-            t1 = dl.head;
-            t2 = dl.tail;
+            t1 = patientRecordObj.head;
+            t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && (!arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id))) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -145,8 +146,8 @@ public class ConsultQueue {
 
         // If right child is larger than largest so far
         if (r < n) { // if (r < n && arr[r] > arr[largest])
-            PatientNode t1 = dl.head;
-            PatientNode t2 = dl.tail;
+            PatientNode t1 = patientRecordObj.head;
+            PatientNode t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && !arr.get(r).equals(t1.id) && !arr.get(r).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -156,8 +157,8 @@ public class ConsultQueue {
                 age_1 = t1.age;
             else if(t2!= null && arr.get(r).equals(t2.id) )
                 age_1 = t2.age;
-            t1 = dl.head;
-            t2 = dl.tail;
+            t1 = patientRecordObj.head;
+            t2 = patientRecordObj.tail;
             while ((t1!= null || t2!= null) && !arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id)) {
                 t1 = t1.next;
                 t2 = t2.prev;
@@ -177,44 +178,44 @@ public class ConsultQueue {
             arr.set(i,arr.get(largest));
             arr.set(largest,swap);
 
-            // Recursively heapify the affected sub-tree
+            // Recursively heapify the affected subtree
             heapify(arr, n, largest);
         }
     }
 
     private static void dequeuePatient(){
-        int n = arr.size();
+        int n = patientList.size();
         if(n>0){
-            int lastElement = arr.get(n - 1);
-            PatientNode temp = dl.head;
+            int lastElement = patientList.get(n - 1);
+            PatientNode temp = patientRecordObj.head;
             while(temp != null){
-                if(temp.id == arr.get(0)){
+                if(temp.id == patientList.get(0)){
                     break;
                 }
                 temp = temp.next;
             }
-            dl.removeNodeByValue(temp);
-            arr.set(0,lastElement);
-            arr.remove(n-1);
-            n = arr.size();
+            patientRecordObj.removeNodeByValue(temp);
+            patientList.set(0,lastElement);
+            patientList.remove(n-1);
+            n = patientList.size();
             for (int i = n / 2 - 1; i >= 0; i--)
-                heapify(arr, n, i);
+                heapify(patientList, n, i);
             for (int i = n - 1; i >= 0; i--) {
                 // Move current root to end
-                int tempOne = arr.get(0);
-                arr.set(0,arr.get(i));
-                arr.set(i,tempOne);
+                int tempOne = patientList.get(0);
+                patientList.set(0,patientList.get(i));
+                patientList.set(i,tempOne);
 
                 // call max heapify on the reduced heap
-                heapify(arr, i, 0);
+                heapify(patientList, i, 0);
             }
         }
     }
 
     public void nextPatient(){
-        if(arr.size()>0){
-            PatientNode temp = dl.head;
-            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(0));
+        if(patientList.size()>0){
+            PatientNode temp = patientRecordObj.head;
+            PatientNode nextPatientNode = patientRecordObj.findPatient(temp,patientList.get(0));
             System.out.println(String.format("%s,%d",nextPatientNode.name,nextPatientNode.id));
             dequeuePatient();
         }
@@ -224,15 +225,20 @@ public class ConsultQueue {
     }
 
     protected static void displayQueue() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
-        PatientNode temp = dl.head;
-        int seq = 1;
-        for(int i=0;i<arr.size();i++){
-            PatientNode nextPatientNode = dl.findPatient(temp,arr.get(i));
-            System.out.printf("%d, %s, %d, %d\n%n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age);
-            writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
-            seq++;
+        if(patientList.size()>0){
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
+            PatientNode temp = patientRecordObj.head;
+            int seq = 1;
+            for(int i=0;i<patientList.size();i++){
+                PatientNode nextPatientNode = patientRecordObj.findPatient(temp,patientList.get(i));
+                System.out.printf("%d, %s, %d, %d\n%n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age);
+                writer.write(String.format("%d, %s, %d, %d\n",seq,nextPatientNode.name,nextPatientNode.id,nextPatientNode.age));
+                seq++;
+            }
+            writer.close();
+        } else {
+            System.out.println("No Patients to attend");
         }
-        writer.close();
+
     }
 }

@@ -7,7 +7,7 @@ public class HospitalConsultation {
 
     public static void main(String[] args) throws IOException {
         int inputChoice = displayMenu();
-        while(inputChoice < 5){
+        while(inputChoice < 6){
             switch (inputChoice){
                 case 1: {
                     consultQueue.readFromInputFile();
@@ -23,34 +23,35 @@ public class HospitalConsultation {
                 case 4:
                     consultQueue.displayQueue();
                     break;
+                case 5:
+                    System.out.println("Exit");
+                    break;
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("Choose correct menu option");
+                    break;
             }
-            inputChoice = displayMenu();
+            if(inputChoice != 5)
+                inputChoice = displayMenu();
+            else{
+                break;
+            }
         }
-        System.out.println("Exit");
     }
 
     private static int displayMenu() {
-        try{
-            Scanner in = new Scanner(System.in);
-            System.out.println("\n" +
+        Scanner in = new Scanner(System.in);
+        System.out.println("\n" +
                     "Menu Options\n" +
                     "1. Import patients from file\n" +
                     "2. Enter new patient information\n" +
                     "3. Display next patient in line\n" +
                     "4. Output current patient waiting list\n" +
                     "5. Exit\n");
-            if(in.hasNextInt()){
-                return in.nextInt();
-            }
-            else{
-                throw new Exception("Choose correct menu option");
-            }
-        }catch(Exception e){
-            System.out.println("Choose correct menu option");
+        boolean flag = in.hasNextInt();
+        if(flag){
+            int val = in.nextInt();
+            return val < 6 ? val : 0;
         }
         return 0;
     }
-
 }
