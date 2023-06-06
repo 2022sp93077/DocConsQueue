@@ -224,23 +224,23 @@ public class ConsultQueue {
 
     protected static void displayQueue() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("Output.txt"));
-        if(patientList.size()>0){
+        if (patientList.size() > 0) {
             PatientNode temp = patientRecordObj.head;
             int seq = 1;
             for (int i = 0; i < patientList.size(); i++) {
                 PatientNode nextPatientNode = patientRecordObj.findPatient(temp, patientList.get(i));
-                System.out.printf("%d, %s, %d, %d\n%n", seq, nextPatientNode.name, nextPatientNode.id,
-                        nextPatientNode.age);
+                // System.out.printf("%d, %s, %d, %d\n%n", seq, nextPatientNode.name,
+                // nextPatientNode.id,
+                // nextPatientNode.age);
                 writer.write(String.format("%d, %s, %d, %d\n", seq, nextPatientNode.name, nextPatientNode.id,
                         nextPatientNode.age));
                 seq++;
             }
-            writer.close();
         } else {
             writer.write("");
-            writer.close();
             System.out.println("No Patients to attend");
         }
-
+        System.out.println("Consultation queue output to file successfully.");
+        writer.close();
     }
 }
