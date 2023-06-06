@@ -1,7 +1,7 @@
-Anu,30
-Riya,35
-Bell,20
-Taco,100
-Nag,40
-samee,52
-puneeth,48
+A1nu,30
+Christopher,35
+Sarah,20
+Michael,70
+William,40
+Robert,52
+James,48

@@ -37,7 +37,7 @@ public class ConsultQueue {
             String patientRecord = fileScanner.nextLine();
             String[] patNameAge = patientRecord.split(",");
 
-            if (patNameAge.length == 2) {
+            if (patNameAge.length == 2 && patNameAge[0].matches("^[a-zA-Z]*$")) {
                 // remove whitespace from both ends of a string
                 patNameAge[0] = patNameAge[0].trim();
                 patNameAge[1] = patNameAge[1].trim();
