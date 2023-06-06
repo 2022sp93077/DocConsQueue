@@ -31,6 +31,7 @@ public class ConsultQueue {
             patientList.removeAll(sec_list);
             patientRecordObj = newPatientRecord;
             patientList = new ArrayList<>();
+            id_gen = 0;
         }
         while (fileScanner.hasNextLine()) {
             String patientRecord = fileScanner.nextLine();
