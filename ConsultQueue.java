@@ -45,7 +45,7 @@ public class ConsultQueue {
                 registerPatient(patNameAge[0], Integer.parseInt(patNameAge[1]), false);
                 count++;
             } else {
-                System.out.println("Invalid record found -" + patientRecord);
+                System.out.println("Invalid record found - " + patientRecord);
             }
 
         }
@@ -117,56 +117,58 @@ public class ConsultQueue {
 
         // If left child is larger than root
         if (l < n) { // if (l < n && arr[l] > arr[largest])
-            PatientNode t1 = patientRecordObj.head;
-            PatientNode t2 = patientRecordObj.tail;
-            while ((t1 != null || t2 != null) && (!(arr.get(l).equals(t1.id)) && !(arr.get(l).equals(t2.id)))) {
-                t1 = t1.next;
-                t2 = t2.prev;
+            PatientNode head = patientRecordObj.head;
+            PatientNode tail = patientRecordObj.tail;
+            while ((head != null || tail != null) && (!(arr.get(l).equals(head.id)) && !(arr.get(l).equals(tail.id)))) {
+                head = head.next;
+                tail = tail.prev;
             }
             int age_1 = 0;
-            if (t1 != null && arr.get(l).equals(t1.id))
-                age_1 = t1.age;
-            else if (t2 != null && arr.get(l).equals(t2.id))
-                age_1 = t2.age;
-            t1 = patientRecordObj.head;
-            t2 = patientRecordObj.tail;
-            while ((t1 != null || t2 != null) && (!arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id))) {
-                t1 = t1.next;
-                t2 = t2.prev;
+            if (head != null && arr.get(l).equals(head.id))
+                age_1 = head.age;
+            else if (tail != null && arr.get(l).equals(tail.id))
+                age_1 = tail.age;
+            head = patientRecordObj.head;
+            tail = patientRecordObj.tail;
+            while ((head != null || tail != null)
+                    && (!arr.get(largest).equals(head.id) && !arr.get(largest).equals(tail.id))) {
+                head = head.next;
+                tail = tail.prev;
             }
             int age_2 = 0;
-            if (t1 != null && arr.get(largest).equals(t1.id))
-                age_2 = t1.age;
-            else if (t2 != null && arr.get(largest).equals(t2.id))
-                age_2 = t2.age;
+            if (head != null && arr.get(largest).equals(head.id))
+                age_2 = head.age;
+            else if (tail != null && arr.get(largest).equals(tail.id))
+                age_2 = tail.age;
             if (age_1 < age_2)
                 largest = l;
         }
 
         // If right child is larger than largest so far
         if (r < n) { // if (r < n && arr[r] > arr[largest])
-            PatientNode t1 = patientRecordObj.head;
-            PatientNode t2 = patientRecordObj.tail;
-            while ((t1 != null || t2 != null) && !arr.get(r).equals(t1.id) && !arr.get(r).equals(t2.id)) {
-                t1 = t1.next;
-                t2 = t2.prev;
+            PatientNode head = patientRecordObj.head;
+            PatientNode tail = patientRecordObj.tail;
+            while ((head != null || tail != null) && !arr.get(r).equals(head.id) && !arr.get(r).equals(tail.id)) {
+                head = head.next;
+                tail = tail.prev;
             }
             int age_1 = 0;
-            if (t1 != null && arr.get(r).equals(t1.id))
-                age_1 = t1.age;
-            else if (t2 != null && arr.get(r).equals(t2.id))
-                age_1 = t2.age;
-            t1 = patientRecordObj.head;
-            t2 = patientRecordObj.tail;
-            while ((t1 != null || t2 != null) && !arr.get(largest).equals(t1.id) && !arr.get(largest).equals(t2.id)) {
-                t1 = t1.next;
-                t2 = t2.prev;
+            if (head != null && arr.get(r).equals(head.id))
+                age_1 = head.age;
+            else if (tail != null && arr.get(r).equals(tail.id))
+                age_1 = tail.age;
+            head = patientRecordObj.head;
+            tail = patientRecordObj.tail;
+            while ((head != null || tail != null) && !arr.get(largest).equals(head.id)
+                    && !arr.get(largest).equals(tail.id)) {
+                head = head.next;
+                tail = tail.prev;
             }
             int age_2 = 0;
-            if (t1 != null && arr.get(largest).equals(t1.id))
-                age_2 = t1.age;
-            else if (t2 != null && arr.get(largest).equals(t2.id))
-                age_2 = t2.age;
+            if (head != null && arr.get(largest).equals(head.id))
+                age_2 = head.age;
+            else if (tail != null && arr.get(largest).equals(tail.id))
+                age_2 = tail.age;
             if (age_1 < age_2)
                 largest = r;
         }
@@ -193,7 +195,10 @@ public class ConsultQueue {
                 }
                 temp = temp.next;
             }
+
+            // removing from DLL to maintain consistent search time
             patientRecordObj.removeNodeByValue(temp);
+
             patientList.set(0, lastElement);
             patientList.remove(n - 1);
             n = patientList.size();
