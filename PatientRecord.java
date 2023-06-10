@@ -111,12 +111,15 @@ public class PatientRecord {
         }
     }
 
-    public PatientNode findPatient(PatientNode node, int id) {
-        while (node != null) {
-            if (node.id == id) {
+    public PatientNode findPatient(PatientNode node,PatientNode tail, int id){
+        while(node!=null || tail!=null){
+            if(node.id == id){
                 return node;
+            } else if (tail.id == id) {
+                return tail;
             }
             node = node.next;
+            tail = tail.prev;
         }
         return null;
     }
