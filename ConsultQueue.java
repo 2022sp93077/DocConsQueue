@@ -76,7 +76,7 @@ public class ConsultQueue {
 
         if (name.length() > 0 && (age > 0 && age < 131)) {
             int patientId = generateId();
-            patientRecordObj.addNodeBack(name, age, patientId);
+            patientRecordObj.addNodeBack(name, (age * 1000) - patientId, patientId);
             if (flag) {
                 System.out.print(String.format("%s added to the queue , current position is ", name));
                 enqueuePatient(patientId, true);
@@ -219,7 +219,7 @@ public class ConsultQueue {
     public void nextPatient() {
         if (patientList.size() > 0) {
             PatientNode temp = patientRecordObj.head;
-            PatientNode nextPatientNode = patientRecordObj.findPatient(temp, patientList.get(0));
+            PatientNode nextPatientNode = patientRecordObj.findPatient(temp, patientRecordObj.tail, patientList.get(0));
             System.out.println(String.format("%s,%d", nextPatientNode.name, nextPatientNode.id));
             dequeuePatient();
         } else {
@@ -233,12 +233,13 @@ public class ConsultQueue {
             PatientNode temp = patientRecordObj.head;
             int seq = 1;
             for (int i = 0; i < patientList.size(); i++) {
-                PatientNode nextPatientNode = patientRecordObj.findPatient(temp, patientList.get(i));
+                PatientNode nextPatientNode = patientRecordObj.findPatient(temp, patientRecordObj.tail,
+                        patientList.get(i));
                 // System.out.printf("%d, %s, %d, %d\n%n", seq, nextPatientNode.name,
                 // nextPatientNode.id,
                 // nextPatientNode.age);
                 writer.write(String.format("%d, %s, %d, %d\n", seq, nextPatientNode.name, nextPatientNode.id,
-                        nextPatientNode.age));
+                        (nextPatientNode.age + nextPatientNode.id) / 1000));
                 seq++;
             }
         } else {
